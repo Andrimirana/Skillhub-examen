@@ -131,7 +131,7 @@ class AuthControllerTest extends TestCase
         $donnees = ['email' => 'jean@example.com', 'mot_de_passe' => 'Password1!'];
         $entetes = $this->genererEntetesSecurite($donnees, 0, true);
         $response = $this->postJson('/api/login', $donnees, $entetes);
-        $response->assertStatus(403)->assertJson(['message' => 'Signature invalide']);
+        $response->assertStatus(403)->assertJson(['message' => 'Signature invalide.']);
     }
 
 
@@ -286,13 +286,13 @@ class AuthControllerTest extends TestCase
         Cache::put('jwt_blacklist:'.hash('sha256', $jeton), true, 3600);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $jeton)->postJson('/api/validate-token');
-        $response->assertStatus(401)->assertJson(['valid' => false, 'message' => 'Jeton blacklisté.']);
+        $response->assertStatus(401)->assertJson(['valid' => false, 'message' => 'Jeton blacklisté']);
     }
 
     // test validation interne avec token invalide : retorne 401
     public function test_validation_interne_echoue_sans_token(): void
     {
         $response = $this->postJson('/api/validate-token');
-        $response->assertStatus(401)->assertJson(['valid' => false, 'message' => 'Jeton manquant.']);
+        $response->assertStatus(401)->assertJson(['valid' => false, 'message' => 'Jeton manquant']);
     }
 }
